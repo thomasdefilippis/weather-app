@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  # Python
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    networks:
+      - my_network
+
+  # Redis
+  redis:
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge
