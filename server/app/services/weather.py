@@ -1,45 +1,45 @@
-import requests
-from app.services.data_fetcher import DataFetcherService
+import redis
+import json
+import time
+import math
+from datetime import datetime
+from collections import defaultdict
 
 class WeatherService:
-    @staticmethod
-    def get_geo_code_by_address(address):
-        try:
-            base_url = "https://geocode.maps.co/search?q={address}"
-            json_data = DataFetcherService.fetch_external_data(f"{base_url}",0.5, 3)
-
-            if not json_data:
-                raise ValueError('No coordinates exist')
-
-            geo_code = {
-                'x': json_data[0]['lat'],
-                'y': json_data[0]['lon']
-            }
-
-            return geo_code
-        except requests.exceptions.RequestException as error:
-            print('Error:', error)
 
     @staticmethod
-    def get_weather_data_by_geo_code(geo_code):
-        geo_code_string = f'{geo_code["x"]},{geo_code["y"]}'
+    def celsius_to_fahrenheit(celsius):
+      fahrenheit = (celsius * 9/5) + 32
+      return fahrenheit
 
-        weather_data_response = requests.get(f'https://api.weather.gov/points/{geo_code_string}')
-        weather_data = weather_data_response.json()
-        observation_station = weather_data['properties']['observationStations']
-
-        closest_station_response = requests.get(observation_station)
-        closest_station = closest_station_response.json()
-        station_name = closest_station['features'][0]['properties']['name']
-
-        station_latest_data_response = requests.get(f'{closest_station["features"][0]["id"]}/observations')
-        station_latest_data = station_latest_data_response.json()
-
-        return station_latest_data
 
     @staticmethod
-    def get_nearest_station_data(address):
-        geo_code = WeatherService.get_geo_code_by_address(address)
-        if geo_code:
-            weather_data = WeatherService.get_weather_data_by_geo_code(geo_code)
-        return weather_data
+    def formatTemperatureMinMax(weather_obect):
+      now = time.time()
+      daily_temperatures = defaultdict(lambda: {
+        'min_c': math.inf,
+        "max_c": -math.inf,
+        "min_f": math.inf,
+        "max_f": -math.inf
+      })
+      for feature in weather_obect['features']:
+        timestamp = feature['properties']['timestamp']
+        date = timestamp.split('T')[0]
+
+        temperature = feature['properties']['temperature']['value']
+
+        if temperature is not None:
+          new_min_c = min(daily_temperatures[date]['min_c'], temperature)
+          new_max_c = max(daily_temperatures[date]['max_c'], temperature)
+          # print(date, daily_temperatures[date]['max_c'], temperature)
+
+          daily_temperatures[date]['min_c'] = new_min_c
+          daily_temperatures[date]['max_c'] = new_max_c
+
+          new_min_f = round(WeatherService.celsius_to_fahrenheit(new_min_c),2)
+          new_max_f = round(WeatherService.celsius_to_fahrenheit(new_max_c),2)
+
+          daily_temperatures[date]['min_f'] = new_min_f
+          daily_temperatures[date]['max_f'] = new_max_f
+
+      return daily_temperatures

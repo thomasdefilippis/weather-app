@@ -15,28 +15,29 @@ const WeatherForm: React.FC = () => {
   const updateWeatherData = (newState: string) => {
     setWeatherData(newState);
   };
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await ApiService.getGeoCodeByAddress('98642');
 
-  //       console.log(response);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // const response =
 
-  //       // if (response.ok) {
-  //       //   const jsonData: ApiResponse = await response.json();
-  //       //   setApiData(jsonData.data);
-  //       // } else {
-  //       //   console.error('Error fetching data from the API');
-  //       // }
-  //     } catch (error) {
-  //       console.error('Error:', error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+        // console.log(response);
 
-  //   fetchData();
-  // }, []);
+        // // if (response.ok) {
+        // //   const jsonData: ApiResponse = await response.json();
+        // //   setApiData(jsonData.data);
+        // // } else {
+        // //   console.error('Error fetching data from the API');
+        // // }
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div>

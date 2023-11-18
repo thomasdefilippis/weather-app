@@ -16,8 +16,8 @@ class Redis_Service:
         return cached_data
 
     @staticmethod
-    def set_cache(key,value):
-      time_to_expire = int(time.time() + 3600)
+    def set_cache(key,value, ttl):
+      time_to_expire = int(time.time() + ttl)
       return redis_client.set(key, json.dumps(value), ex=time_to_expire)
 
     @staticmethod

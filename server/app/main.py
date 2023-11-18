@@ -1,8 +1,10 @@
 from typing import Union
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from dotenv import load_dotenv
-from app.services.weather import Weather_Service
+from app.controllers.weather import WeatherController
 from app.services.redis import Redis_Service
+from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 import os
 import redis
 
@@ -11,17 +13,23 @@ app = FastAPI()
 
 load_dotenv()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-@app.get("/")
-def read_root():
-    return "root"
-
-@app.get("/weather-data-by-address")
+@app.get("/get-weather-data-by-address")
 def get_weather_data(address=''):
-    cached_data = Redis_Service.get_cache(address)
-    ttl = Redis_Service.get_ttl(address)
-    if not cached_data:
-        response = Weather_Service.get_nearest_station_data(address)
-        cached_data = Redis_Service.set_cache(address, response)
-        return response
-    return cached_data
+    try:
+        cached_data = Redis_Service.get_cache(address)
+        ttl = Redis_Service.get_ttl(address)
+        if not cached_data:
+            response = WeatherController.get_nearest_station_data(address)
+            # cached_data = Redis_Service.set_cache(address, response, 900)
+            return response
+        return cached_data
+    except HTTPException as http_exception:
+        return JSONResponse(content={"error": http_exception.detail}, status_code=http_exception.status_code)
