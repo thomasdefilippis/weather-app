@@ -1,7 +1,7 @@
 from typing import Union
 from fastapi import FastAPI, HTTPException
 from dotenv import load_dotenv
-from app.controllers.weather import WeatherController
+from app.controllers.weather_controller import WeatherController
 from app.services.redis import Redis_Service
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -25,11 +25,14 @@ app.add_middleware(
 def get_weather_data(address=''):
     try:
         cached_data = Redis_Service.get_cache(address)
-        ttl = Redis_Service.get_ttl(address)
         if not cached_data:
-            response = WeatherController.get_nearest_station_data(address)
-            # cached_data = Redis_Service.set_cache(address, response, 900)
+            WeatherControllerInstance = WeatherController()
+            response = WeatherControllerInstance.get_nearest_station_data(address)
+            cached_data = Redis_Service.set_cache(address, response, 900)
             return response
         return cached_data
     except HTTPException as http_exception:
         return JSONResponse(content={"error": http_exception.detail}, status_code=http_exception.status_code)
+    # except Exception as error:
+    #     print(error)
+    #     return JSONResponse(content={"error": "Internal Server Error"}, status_code=500)
