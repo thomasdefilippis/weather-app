@@ -1,7 +1,7 @@
 import requests
 from fastapi import HTTPException, Depends
 from app.services.data_fetcher_service import DataFetcherService
-from app.services.weather import WeatherService
+from app.services.weather_service import WeatherService
 import json
 
 
@@ -28,10 +28,11 @@ class WeatherController:
 
     def get_observation_station_url_by_geo_code(self,geo_code):
         geo_code_string = f'{geo_code["x"]},{geo_code["y"]}'
-        print(geo_code_string)
+        print(geo_code)
 
         base_weather_url = 'https://api.weather.gov'
         weather_data = self.data_fetcher_service.fetch_external_data(f"{base_weather_url}/points/{geo_code_string}",0.5, 3)
+
         if not weather_data:
             raise HTTPException(status_code=404, detail="Weather data at that address does not exist.")
 
@@ -39,14 +40,20 @@ class WeatherController:
         return observation_station
 
     def get_station(self, url):
-        station = self.data_fetcher_service.fetch_external_data(url)
+        station = self.data_fetcher_service.fetch_external_data(url, 0.75, 3)
+        print(station)
+        if not station:
+            raise HTTPException(status_code=404, detail="Weather data at that address does not exist.")
         return station
 
     def get_station_latest_data(self,station):
-        station_latest_data = self.data_fetcher_service.fetch_external_data(f"{station['features'][0]['id']}/observations",0.5, 3)
-        if not station_latest_data:
-            raise HTTPException(status_code=404, detail="Weather data at that address does not exist")
+        station_latest_data = self.data_fetcher_service.fetch_external_data(
+            f"{station['features'][0]['id']}/observations",0.75, 3
+        )
+        print(f"{station['features'][0]['id']}/observations")
 
+        if not station_latest_data:
+            raise HTTPException(status_code=404, detail="Weather data at that address does not exist.")
         return station_latest_data
 
     def get_nearest_station_data(self,address):
@@ -57,7 +64,7 @@ class WeatherController:
                 observation_station_url = self.get_observation_station_url_by_geo_code(geo_code)
                 station = self.get_station(observation_station_url)
                 station_data = self.get_station_latest_data(station)
-                station_data['min_max_by_date'] = WeatherService.formatTemperatureMinMax(station_data)
+                station_data['min_max_by_date'] = WeatherService.format_temperature_min_max(station_data)
                 station_data['location'] = geo_code['display_name']
                 all_weather_data.append(station_data)
         return all_weather_data

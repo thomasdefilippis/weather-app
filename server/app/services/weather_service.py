@@ -14,7 +14,7 @@ class WeatherService:
 
 
     @staticmethod
-    def formatTemperatureMinMax(weather_obect):
+    def format_temperature_min_max(weather_obect):
       now = time.time()
       daily_temperatures = defaultdict(lambda: {
         'min_c': math.inf,

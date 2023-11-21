@@ -33,6 +33,3 @@ def get_weather_data(address=''):
         return cached_data
     except HTTPException as http_exception:
         return JSONResponse(content={"error": http_exception.detail}, status_code=http_exception.status_code)
-    # except Exception as error:
-    #     print(error)
-    #     return JSONResponse(content={"error": "Internal Server Error"}, status_code=500)

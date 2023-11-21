@@ -22,5 +22,3 @@ class DataFetcherService:
           if timeout > 0:
             time.sleep(timeout)
           return DataFetcherService.fetch_external_data(url, timeout, retries - 1)
-
-      # raise Exception(f"Failed to fetch data from {url} after {retries} attempts")

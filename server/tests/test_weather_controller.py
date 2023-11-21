@@ -71,12 +71,12 @@ def test_get_observation_station_url_by_geo_code(mock_data_fetcher_service):
 
 def test_get_observation_station_url_by_geo_code_returns_error_when_response_empty(mock_data_fetcher_service):
     weather_controller = WeatherController(mock_data_fetcher_service)
-    mock_data_fetcher_service.fetch_external_data.return_value = load_fake_data('observation_station_url_by_geo_code.json')
+    mock_data_fetcher_service.fetch_external_data.return_value = None
 
     with pytest.raises(HTTPException) as exc_info:
       result = weather_controller.get_observation_station_url_by_geo_code({'x': '', 'y': ''})
 
-    assert exc_info.value.detail == "Address does not exist."
+    assert exc_info.value.detail == "Weather data at that address does not exist."
 
     mock_data_fetcher_service.fetch_external_data.assert_called_once_with(
       "https://api.weather.gov/points/,", 0.5, 3
@@ -84,6 +84,30 @@ def test_get_observation_station_url_by_geo_code_returns_error_when_response_emp
 
     pass
 
-# def test_get_nearest_station_data():
-#     # Write test cases for get_nearest_station_data
-#     pass
+def test_get_station_returns_error_when_response_empty(mock_data_fetcher_service):
+    weather_controller = WeatherController(mock_data_fetcher_service)
+    mock_data_fetcher_service.fetch_external_data.return_value = []
+
+    with pytest.raises(HTTPException) as exc_info:
+      result = weather_controller.get_station("https://api.weather.gov/gridpoints/PQR/89,148/stations")
+
+    assert exc_info.value.detail == "Weather data at that address does not exist."
+
+    mock_data_fetcher_service.fetch_external_data.assert_called_once_with(
+      "https://api.weather.gov/gridpoints/PQR/89,148/stations", 0.75, 3
+    )
+
+    pass
+
+def test_get_station_latest_data_returns_error_when_response_empty(mock_data_fetcher_service):
+    weather_controller = WeatherController(mock_data_fetcher_service)
+    mock_data_fetcher_service.fetch_external_data.return_value = []
+
+    with pytest.raises(HTTPException) as exc_info:
+      result = weather_controller.get_station_latest_data(load_fake_data('stations.json'))
+
+    assert exc_info.value.detail == "Weather data at that address does not exist."
+
+    mock_data_fetcher_service.fetch_external_data.assert_called_once_with(
+      "https://api.weather.gov/stations/ODT46/observations", 0.75, 3
+    )
