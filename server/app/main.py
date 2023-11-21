@@ -28,7 +28,7 @@ def get_weather_data(address=''):
         if not cached_data:
             WeatherControllerInstance = WeatherController()
             response = WeatherControllerInstance.get_nearest_station_data(address)
-            cached_data = Redis_Service.set_cache(address, response, 900)
+            # cached_data = Redis_Service.set_cache(address, response, 900)
             return response
         return cached_data
     except HTTPException as http_exception:
