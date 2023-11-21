@@ -1,48 +1,34 @@
-import { useState, useEffect } from 'react';
-import ApiService from '../services/ApiService';
+import { useState } from 'react';
 import WeatherResults from './WeatherResults';
+import MinMaxByDate from '../types/MinMaxTempByDate';
 import SearchBar from './SearchBar';
 
-interface ApiResponse {
-  data: string;
-}
-
 const WeatherForm: React.FC = () => {
-  const [weatherData, setWeatherData] = useState<string>('Initial State');
-  const [loading, setLoading] = useState<boolean>(true);
-
-
-  const updateWeatherData = (newState: string) => {
-    setWeatherData(newState);
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // const response =
-
-        // console.log(response);
-
-        // // if (response.ok) {
-        // //   const jsonData: ApiResponse = await response.json();
-        // //   setApiData(jsonData.data);
-        // // } else {
-        // //   console.error('Error fetching data from the API');
-        // // }
-      } catch (error) {
-        console.error('Error:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const [weatherData, setWeatherData] = useState<Array<{error?:string, location: string}>>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
+  const [currentMinMaxTemps, setCurrentMinMaxTemps] = useState<Array<JSX.Element>>([]);
+  const [showAddresses, setShowAddresses] = useState<boolean>(false)
 
   return (
     <div>
-      <SearchBar updateWeatherData={updateWeatherData}/>
-      <WeatherResults />
+      <SearchBar
+        setWeatherData={setWeatherData}
+        isLoading={isLoading}
+        setIsLoading={setIsLoading}
+        setError={setError}
+        setShowAddresses={setShowAddresses}
+        setCurrentMinMaxTemps={setCurrentMinMaxTemps}
+      />
+      <WeatherResults
+        weatherData={weatherData}
+        isLoading={isLoading}
+        error={error}
+        showAddresses={showAddresses}
+        setShowAddresses={setShowAddresses}
+        currentMinMaxTemps={currentMinMaxTemps}
+        setCurrentMinMaxTemps={setCurrentMinMaxTemps}
+      />
     </div>
   );
 };

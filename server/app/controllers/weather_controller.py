@@ -50,7 +50,6 @@ class WeatherController:
         station_latest_data = self.data_fetcher_service.fetch_external_data(
             f"{station['features'][0]['id']}/observations",0.75, 3
         )
-        print(f"{station['features'][0]['id']}/observations")
 
         if not station_latest_data:
             raise HTTPException(status_code=404, detail="Weather data at that address does not exist.")
