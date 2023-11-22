@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import WeatherData from '../types/WeatherData'
 import MinMaxByDate from '../types/MinMaxTempByDate';
+import React from 'react';
 
 interface ChildProps {
-  weatherData: WeatherData;
+  weatherData: Array<WeatherData>;
   isLoading: boolean;
   error: string;
   showAddresses:boolean;
@@ -16,8 +17,8 @@ const WeatherResults: React.FC<ChildProps> = ({weatherData, isLoading, error, sh
   const [currentLocation, setCurrentLocation] = useState<string>('');
 
   const handleAddressClick = (index: number) => {
-    console.log(weatherData[index].location);
-    setCurrentLocation(weatherData[index].location);
+    const location = weatherData[index].location ?? '';
+    setCurrentLocation(location);
     setCurrentMinMaxTemps(renderMinMaxTempByDate(weatherData[index]));
   };
 
@@ -26,13 +27,11 @@ const WeatherResults: React.FC<ChildProps> = ({weatherData, isLoading, error, sh
       let minMaxByDate: MinMaxByDate = weatherData.min_max_by_date;
       const minMaxTemps = Object.entries(minMaxByDate).map(([date, temps], index) => (
         <div key={"min-max-by-date-" + index} className="bg-white rounded-lg border border-gray-black shadow-xl p-6">
-          <a>
-            <p>{date}</p>
+            <p className="mb-2">{date}</p>
             <p><strong>Min C: </strong>{temps.min_c}&#176;</p>
             <p><strong>Max C: </strong>{temps.max_c}&#176;</p>
             <p><strong>Min F:</strong> {temps.min_f}&#176;</p>
             <p><strong>Max F:</strong> {temps.max_f}&#176;</p>
-          </a>
         </div>
       ))
 
@@ -45,9 +44,9 @@ const WeatherResults: React.FC<ChildProps> = ({weatherData, isLoading, error, sh
   };
 
   const items = weatherData.map((item, index) => (
-    <a href="#" key={"loation-" + index} onClick={() => {handleAddressClick(index)}}  className="bg-white rounded-lg border border-gray-black shadow-xl p-6 cursor-pointer  hover:opacity-80">
+    <div key={"loation-" + index} onClick={() => {handleAddressClick(index)}}  className="bg-white rounded-lg border border-gray-black shadow-xl p-6 cursor-pointer  hover:opacity-80">
       <p>{item.location}</p>
-    </a>
+    </div>
   ));
 
 

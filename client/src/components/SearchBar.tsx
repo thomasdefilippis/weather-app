@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
 import ApiService from '../services/ApiService';
-
-type WeatherData = {
-  error?: string,
-  location?: string
-}
+import WeatherData from '../types/WeatherData'
 
 interface ChildProps {
-  setWeatherData: (newState: WeatherData) => void;
+  setWeatherData: (newState: Array<WeatherData>) => void;
   isLoading: boolean;
   setIsLoading: (newState: boolean) => void;
   setError: (newState: string) => void;
   setShowAddresses: (newState: boolean) => void;
+  setCurrentMinMaxTemps: (newState: Array<JSX.Element>) => void;
 }
 
 
@@ -45,7 +42,7 @@ const SearchBar: React.FC<ChildProps> = ({setWeatherData, isLoading, setIsLoadin
   };
 
   return (
-    <div className="flex flex-col items-center justify-center mt-8 lg:flex-row">
+    <section className="flex flex-col items-center justify-center mt-8 lg:flex-row">
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -61,7 +58,7 @@ const SearchBar: React.FC<ChildProps> = ({setWeatherData, isLoading, setIsLoadin
           Search
         </button>
       </form>
-    </div>
+    </section>
   );
 };
 
