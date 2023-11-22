@@ -69,7 +69,7 @@ const WeatherResults: React.FC<ChildProps> = ({weatherData, isLoading, error, sh
             <div className={`w-full flex flex-col space-y-4 mt-6 ${currentMinMaxTemps.length < 1 || showAddresses ? 'hidden' : ''}`} >
               <div className="w-full flex flex-col items-center space-y-4">
                 <h2 className='font-bold'>Available Data for:</h2>
-                <p className='w-80'>{currentLocation}</p>
+                <p className='text-center w-80'>{currentLocation}</p>
               </div>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
                 {currentMinMaxTemps}

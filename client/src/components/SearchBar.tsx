@@ -42,18 +42,18 @@ const SearchBar: React.FC<ChildProps> = ({setWeatherData, isLoading, setIsLoadin
   };
 
   return (
-    <section className="flex flex-col items-center justify-center mt-8 lg:flex-row">
-      <form onSubmit={handleSubmit}>
+    <section className=" mt-8 lg:flex-row">
+      <form className='flex flex-col items-center justify-center lg:flex-row lg:space-x-2' onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="Search by US Address"
+          placeholder="Search by US city,state or zip"
           value={address}
           onChange={handleSearch}
-          className="border text-black border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:border-blue-300"
+          className="border w-full text-black border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:border-blue-300 lg:w-80"
         />
         <button
           type="submit"
-          className="ml-2 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300"
+          className="bg-blue-500 w-full text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 lg:w-auto"
         >
           Search
         </button>
