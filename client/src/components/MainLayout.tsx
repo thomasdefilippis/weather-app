@@ -3,7 +3,7 @@ import React from 'react';
 
 const MainLayout = ({ children }) => {
   return (
-    <div className="bg-gray-100 text-gray-800 min-h-screen">
+    <div className="bg-gray-100 text-gray-800 min-h-screen relative">
       {/* Header */}
       <header className="bg-gray-800 text-white p-4">
         <div className="container mx-auto">
@@ -12,7 +12,7 @@ const MainLayout = ({ children }) => {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto p-4 h-full">
+      <main className="container mx-auto p-4 h-full overflow-auto">
         {children}
       </main>
 

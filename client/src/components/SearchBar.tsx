@@ -11,12 +11,12 @@ interface ChildProps {
   isLoading: boolean;
   setIsLoading: (newState: boolean) => void;
   setError: (newState: string) => void;
-  setShowAddress: (newState: boolean) => void;
+  setShowAddresses: (newState: boolean) => void;
 }
 
 
 
-const SearchBar: React.FC<ChildProps> = ({ setWeatherData, isLoading, setIsLoading, setError, setShowAddresses }) => {
+const SearchBar: React.FC<ChildProps> = ({setWeatherData, isLoading, setIsLoading, setError, setShowAddresses }) => {
   const [address, setAddress] = useState<string>('');
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,11 +45,11 @@ const SearchBar: React.FC<ChildProps> = ({ setWeatherData, isLoading, setIsLoadi
   };
 
   return (
-    <div className="flex items-center justify-center mt-8">
+    <div className="flex flex-col items-center justify-center mt-8 lg:flex-row">
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="Search by Address"
+          placeholder="Search by US Address"
           value={address}
           onChange={handleSearch}
           className="border text-black border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:border-blue-300"

@@ -5,7 +5,7 @@ import MinMaxByDate from '../types/MinMaxTempByDate';
 interface ChildProps {
   weatherData: WeatherData;
   isLoading: boolean;
-  error:string;
+  error: string;
   showAddresses:boolean;
   setShowAddresses:(newState: boolean) => void;
   currentMinMaxTemps:Array<JSX.Element>;
@@ -16,19 +16,22 @@ const WeatherResults: React.FC<ChildProps> = ({weatherData, isLoading, error, sh
   const [currentLocation, setCurrentLocation] = useState<string>('');
 
   const handleAddressClick = (index: number) => {
+    console.log(weatherData[index].location);
+    setCurrentLocation(weatherData[index].location);
     setCurrentMinMaxTemps(renderMinMaxTempByDate(weatherData[index]));
   };
 
   const renderMinMaxTempByDate = (weatherData: WeatherData) => {
-    console.log(weatherData.min_max_by_date)
     if(weatherData.min_max_by_date) {
       let minMaxByDate: MinMaxByDate = weatherData.min_max_by_date;
       const minMaxTemps = Object.entries(minMaxByDate).map(([date, temps], index) => (
         <div key={"min-max-by-date-" + index} className="bg-white rounded-lg border border-gray-black shadow-xl p-6">
           <a>
             <p>{date}</p>
-            <p><strong>Min C: </strong>{temps.min_c}, <strong>Max C:</strong>{temps.max_c}</p>
-            <p><strong>Min F:</strong> {temps.min_f}, <strong>Max F:</strong> {temps.max_f}</p>
+            <p><strong>Min C: </strong>{temps.min_c}&#176;</p>
+            <p><strong>Max C: </strong>{temps.max_c}&#176;</p>
+            <p><strong>Min F:</strong> {temps.min_f}&#176;</p>
+            <p><strong>Max F:</strong> {temps.max_f}&#176;</p>
           </a>
         </div>
       ))
@@ -42,7 +45,7 @@ const WeatherResults: React.FC<ChildProps> = ({weatherData, isLoading, error, sh
   };
 
   const items = weatherData.map((item, index) => (
-    <a key={"loation-" + index} onClick={() => {console.log('hello');handleAddressClick(index)}}  className="bg-white rounded-lg border border-gray-black shadow-xl p-6 cursor-pointer  hover:opacity-80">
+    <a href="#" key={"loation-" + index} onClick={() => {handleAddressClick(index)}}  className="bg-white rounded-lg border border-gray-black shadow-xl p-6 cursor-pointer  hover:opacity-80">
       <p>{item.location}</p>
     </a>
   ));
@@ -60,13 +63,16 @@ const WeatherResults: React.FC<ChildProps> = ({weatherData, isLoading, error, sh
             <h2 className="w-full text-center text-red-500 font-bold mt-6">{error}</h2>
             <div className={`w-full flex flex-col space-y-4 mt-6 ${(weatherData.length < 1 || !showAddresses) ? 'hidden' : ''}`} >
               <h2 className="w-full text-center font-bold">Do any of the following match your address?</h2>
-              <div className="grid grid-cols-5 gap-x-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
                 {items}
               </div>
             </div>
             <div className={`w-full flex flex-col space-y-4 mt-6 ${currentMinMaxTemps.length < 1 || showAddresses ? 'hidden' : ''}`} >
-              <h2 className="w-full text-center font-bold">Available Data</h2>
-              <div className="grid grid-cols-5 gap-4">
+              <div className="w-full flex flex-col items-center space-y-4">
+                <h2 className='font-bold'>Available Data for:</h2>
+                <p className='w-80'>{currentLocation}</p>
+              </div>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
                 {currentMinMaxTemps}
               </div>
             </div>

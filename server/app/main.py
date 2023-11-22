@@ -1,8 +1,7 @@
 from typing import Union
 from fastapi import FastAPI, HTTPException
-from dotenv import load_dotenv
 from app.controllers.weather_controller import WeatherController
-from app.services.redis import Redis_Service
+from app.services.redis_service import Redis_Service
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import os
@@ -10,9 +9,8 @@ import redis
 
 app = FastAPI()
 
-
-load_dotenv()
-
+# To run locally, it is necessary to allow all origins.
+# This would obviously not be run in a production environment.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

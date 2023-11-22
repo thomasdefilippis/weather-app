@@ -1,0 +1,13 @@
+{
+  "name": "weather-app",
+  "version": "1.0.0",
+  "description": "Weather App is an application that sends an address to the https://weather.gov api and returns the min and max tempuratures of the nearest stations in a user friendly interface. To build this app, the following technologies were used",
+  "main": "index.js",
+  "git repository": "",
+  "scripts": {
+    "setup": "docker-compose -f ./server/docker-compose.yml up -d && npm --prefix ./client install && npm --prefix ./client run start",
+    "test": "docker exec -it server-app-1 python -m pytest --verbose"
+  },
+  "author": "Thomas Defilippis",
+  "license": "ISC"
+}
