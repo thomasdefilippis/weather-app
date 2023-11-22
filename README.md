@@ -8,7 +8,7 @@ Weather App is an application that sends a United States address to the https://
   - Fast Api (python) https://fastapi.tiangolo.com/
   - Redis Server (https://redis.io/)
 
-Although all of the api calls could have been handled with a single front end application such as react, providing a backend allows the application to cache responses from the external apis which reduces response times, rate limit errors, and other misc. errors. Furthermore, it is good practice to reduce third party calls as much as possible since these tend to cause the most errors in an application. Therfore, having a backend for the application provides a huge benefit in performance.
+Although all of the api calls could have been handled with a single front end application such as react, providing a backend allows the application to cache responses from the external apis which reduces response times, rate limit errors, and other misc. errors. Furthermore, it is good practice to reduce third party calls as much as possible since these tend to cause the most errors in an application. Therefore, having a backend for the application provides a huge benefit in performance.
 
 
 
@@ -16,7 +16,7 @@ Although all of the api calls could have been handled with a single front end ap
 - node: >=0.10.0
 - docker: 23.0.5 (This is the version used when building the app. Other earlier versions likely work.)
   - install with brew `brew install --cask docker`
-  - install by downloading ``
+  - install by downloading from website `https://www.docker.com/products/docker-desktop/`
 
 ## Setup
 
