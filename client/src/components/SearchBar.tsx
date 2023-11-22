@@ -27,7 +27,6 @@ const SearchBar: React.FC<ChildProps> = ({setWeatherData, isLoading, setIsLoadin
     try {
       setError('')
       const weatherData:WeatherData = await ApiService.getNearestStationData(address);
-      console.log(weatherData)
       if (weatherData.error) {
         throw Error(weatherData.error)
       }
