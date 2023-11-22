@@ -28,7 +28,6 @@ class WeatherController:
 
     def get_observation_station_url_by_geo_code(self,geo_code):
         geo_code_string = f'{geo_code["x"]},{geo_code["y"]}'
-        print(geo_code)
 
         base_weather_url = 'https://api.weather.gov'
         weather_data = self.data_fetcher_service.fetch_external_data(f"{base_weather_url}/points/{geo_code_string}",0.5, 3)
@@ -41,7 +40,6 @@ class WeatherController:
 
     def get_station(self, url):
         station = self.data_fetcher_service.fetch_external_data(url, 0.75, 3)
-        print(station)
         if not station:
             raise HTTPException(status_code=404, detail="Weather data at that address does not exist.")
         return station

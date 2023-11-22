@@ -31,7 +31,6 @@ class WeatherService:
         if temperature is not None:
           new_min_c = min(daily_temperatures[date]['min_c'], temperature)
           new_max_c = max(daily_temperatures[date]['max_c'], temperature)
-          # print(date, daily_temperatures[date]['max_c'], temperature)
 
           daily_temperatures[date]['min_c'] = new_min_c
           daily_temperatures[date]['max_c'] = new_max_c
